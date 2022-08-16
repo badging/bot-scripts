@@ -100,6 +100,6 @@ echo -e "\xE2\x9C\x94 moved to badging-bot directory"
 mv ../.env . && rm -rf ../.env
 echo -e "\xE2\x9C\x94 moved .env file to badging-bot directory"
 
-npm ci
+npx -y husky-init && npm ci
 
 npm run dev
