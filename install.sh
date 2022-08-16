@@ -1,0 +1,105 @@
+#!/bin/sh
+set -euxo pipefail #exit in case of errors
+
+# install dependencies
+sudo apt update && sudo apt upgrade -y && sudo apt install -y git && sudo apt install -y gh && sudo apt install -y curl && sudo apt install -y nodejs && sudo apt install -y npm
+echo
+#Configures git
+read -p $'\e[1mEnter Github username: \e[22m' username
+git config --global user.name $username
+echo -e "\xE2\x9C\x94 set git username to $username"
+
+read -p $'\e[1mEnter Github email: \e[22m' email
+git config --global user.email $email
+echo -e "\xE2\x9C\x94 set git email to $email"
+echo
+
+#Configures github CLI
+echo -e '\e[1m----------------Logging in to GitHub CLI:----------------\e[22m'
+gh auth login
+echo -e '\xE2\x9C\x94 \e[1m----------------Logged in to GitHub CLI:----------------\e[22m'
+echo
+
+#fork and clone repositories
+gh repo fork --clone=true https://github.com/badging/badging-bot.git
+gh repo fork --clone=false https://github.com/badging/event-diversity-and-inclusion.git
+echo
+
+#configure github app
+echo -e '\e[91mREAD CAREFULLY AND FOLLOW THE INSTRUCTIONS BELOW TO CONFIGURE YOUR LOCAL DEVELOPMENT ENVIRONMENT.\e[39m'
+echo -e '\e[38;5;42mNavigate to https://github.com/settings/apps/new to create a new personal badging-bot Github test app.
+This app will be installed on your test repository at https://github.com/$username/event-diversity-and-inclusion.
+Since the app may be used to test a lot of use cases, ensure that all the access permissions are set to \e[1mRead and Write\e[22m and or all checkboxes are marked.\e[39m'
+
+echo -e '\e[91mEnsure that you supply a Webhook URL and Webhook Secret for your new app.\e[39m'
+echo -e '\e[38;5;42mFor the Webhook URL, visit https://smee.io, copy and paste the URL to the \eWebhook URL section of the app\e[22m and also to the prompt below.\e[39m'
+echo
+
+#create temporary env file
+touch .env
+echo -e "\xE2\x9C\x94 created temporary .env file"
+echo
+
+read -p $'\e[1mEnter Webhook URL: \e[22m' webhookurl
+echo "webhookURL=$webhookurl" >> .env
+echo -e "\xE2\x9C\x94 set webhookURL to $webhookurl"
+echo
+
+read -p $'\e[1mEnter Webhook Secret: \e[22m' webhooksecret
+echo "webhookSecret=$webhooksecret" >> .env
+echo -e "\xE2\x9C\x94 set webhookSecret to $webhooksecret"
+echo
+
+echo -e '\e[38;5;42mOnce the app is created, you will be redirected to another page that will help you access the following
+  1. App Id
+  2. Client Id
+  3. Client Secret (this will be generated and pasted in the prompt below)
+  4. Private key (You will be required to download a PEM file and provide the FULL PATH to it in the prompt below)\e[39m'
+echo
+
+echo -e '\e[91mFill in the following information as set in your app settings\e[39m'
+read -p $'\e[1mEnter App Id: \e[22m' appid
+echo "appId=$appid" >> .env
+echo -e "\xE2\x9C\x94 set appId to $appid"
+echo
+
+read -p $'\e[1mEnter Client Id: \e[22m' clientid
+echo "clientId=$clientid" >> .env
+echo -e "\xE2\x9C\x94 set clientId to $clientid"
+echo
+
+read -p $'\e[1mEnter Client Secret: \e[22m' clientsecret
+echo "clientSecret=$clientsecret" >> .env
+echo -e "\xE2\x9C\x94 set clientSecret to $clientsecret"
+echo
+
+read -p $'\e[1mEnter FULL PATH to downloaded PEM file: \e[22m' privatekeyPath
+echo "privateKey=$(cat $privatekeyPath)" >> .env
+echo -e "\xE2\x9C\x94 set privateKey"
+echo
+
+echo "PORT=2020" >> .env
+echo -e "\xE2\x9C\x94 set PORT to 2020"
+echo
+
+while true; do
+    read -p $'\e[38;5;42mHave you installed the test app on your forked \e[1mevent-diversity-and-inclusion\e[22m repository? (y/n): \e[39m' answer
+
+    if [ $answer == y ];then
+        break
+    else
+        echo -e '\e[38;5;42mFor guidance, visit https://docs.github.com/en/developers/apps/managing-github-apps/installing-github-apps \e[39m'
+        echo
+    fi
+done
+echo
+
+cd badging-bot
+echo -e "\xE2\x9C\x94 moved to badging-bot directory"
+
+mv ../.env . && rm -rf ../.env
+echo -e "\xE2\x9C\x94 moved .env file to badging-bot directory"
+
+npm ci
+
+npm run dev
