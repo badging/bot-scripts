@@ -2,7 +2,15 @@
 set -euxo pipefail #exit in case of errors
 
 # install dependencies
-sudo apt update && sudo apt upgrade -y && sudo apt install -y git && sudo apt install -y gh && sudo apt install -y curl && sudo apt install -y nodejs && sudo apt install -y npm
+while true; do
+    if sudo apt update && sudo apt upgrade -y && sudo apt install -y git && sudo apt install -y gh && sudo apt install -y curl && sudo apt install -y nodejs && sudo apt install -y npm; then
+        echo
+        break
+    else
+        echo -e "\xE2\x9D\x8C please input your password to proceed so that the setup runs successfully"
+        exit 1
+    fi
+done
 echo
 #Configures git
 read -p $'\e[1mEnter Github username: \e[22m' username
