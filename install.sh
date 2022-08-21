@@ -8,7 +8,7 @@ while true; do
         break
     else
         echo -e "\xE2\x9D\x8C please input your password to proceed so that the setup runs successfully"
-        exit 1
+        return
     fi
 done
 echo
