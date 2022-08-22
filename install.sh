@@ -121,7 +121,7 @@ echo -e "\xE2\x9C\x94 set clientSecret to $clientsecret"
 echo
 
 read -p $'\e[1mEnter FULL PATH to downloaded PEM file: \e[22m' privatekeyPath
-echo "privateKey=$(cat $privatekeyPath)" >> .env
+echo "privateKey='$(cat $privatekeyPath)'" >> .env
 echo -e "\xE2\x9C\x94 set privateKey"
 echo
 
