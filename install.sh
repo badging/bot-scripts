@@ -3,12 +3,34 @@ set -euxo pipefail #exit in case of errors
 
 # install dependencies
 while true; do
-    if sudo apt update && sudo apt upgrade -y && sudo apt install -y git && sudo apt install -y gh && sudo apt install -y curl && sudo apt install -y nodejs && sudo apt install -y npm; then
+    echo -e '\e[91mPLEASE INPUT SUDO PASSWORD WHEN PROMPTED OTHERWISE TERMINAL WILL CLOSE SCRIPT\e[39m'
+
+    if [ $(uname -s) == Linux ]; then
+        echo -e "\xE2\x9D\x8C please input your password to proceed so that the setup runs successfully"
+        echo
+        if sudo apt update && sudo apt upgrade -y && sudo apt install -y git && sudo apt install -y gh && sudo apt install -y curl && sudo apt install -y nodejs && sudo apt install -y npm; then
+            echo
+            break
+        else
+            echo -e "\xE2\x9D\x8C please input your password to proceed so that the setup runs successfully"
+            exit 1
+        fi
         echo
         break
+    elif
+        [ $(uname -s) == Darwin ]; then
+        if brew update && brew upgrade && brew install git && brew install gh && brew install curl && brew install node && brew install npm; then
+        echo
+        break
+        else
+            exit 1
+        fi
+        echo
+        break
+    elif [ $(uname -s) == CYGWIN || $(uname -s) ==* ]; then
+        echo "CYGWIN is not yet supported"
     else
-        echo -e "\xE2\x9D\x8C please input your password to proceed so that the setup runs successfully"
-        return
+        exit
     fi
 done
 echo
