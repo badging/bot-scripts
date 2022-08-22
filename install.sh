@@ -71,6 +71,23 @@ echo -e "\xE2\x9C\x94 created temporary .env file"
 echo
 
 read -p $'\e[1mEnter Webhook URL: \e[22m' webhookurl
+
+#check whether URL is responsive
+while true; do
+
+    if  grep -q "200" <<< "$(curl -Is $webhookurl | head -1)" ; then
+    echo -e "\xE2\x9C\x94 \e[1m\e[38;5;42m$webhookurl\e[39m is up and running\e[22m"
+    echo
+    break
+    else
+        echo -e "\xE2\x9D\x8C \e[1m\e[91m$webhookurl\e[39m is not responsive as intended.
+        Please provide a working Webhook URL as pasted in your GitHub App settings from https://smee.io \e[22m"
+        echo
+        read -p $'\e[1mEnter Webhook URL: \e[22m' anotherURL
+        webhookurl="$anotherURL"
+    fi
+done
+
 echo "webhookURL=$webhookurl" >> .env
 echo -e "\xE2\x9C\x94 set webhookURL to $webhookurl"
 echo
