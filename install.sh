@@ -19,7 +19,7 @@ while true; do
         break
     elif
         [ $(uname -s) == Darwin ]; then
-        if brew install git && brew install gh && brew install curl && brew install node && brew install npm; then
+        if brew update && brew upgrade && brew install git && brew install gh && brew install curl && brew install node && brew install npm; then
         echo
         break
         else
