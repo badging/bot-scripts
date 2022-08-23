@@ -1,5 +1,5 @@
 #!/bin/sh
-set -euxo pipefail #exit in case of errors
+set -euo pipefail #exit in case of errors
 
 # install dependencies
 while true; do
@@ -8,30 +8,34 @@ while true; do
     if [ $(uname -s) == Linux ]; then
         echo -e "\xE2\x9D\x8C please input your password to proceed so that the setup runs successfully"
         echo
+
         if sudo apt update && sudo apt upgrade -y && sudo apt install -y git && sudo apt install -y gh && sudo apt install -y curl && sudo apt install -y nodejs && sudo apt install -y npm; then
             echo
             break
         else
             echo -e "\xE2\x9D\x8C please input your password to proceed so that the setup runs successfully"
-            exit 1
+            return
         fi
         echo
         break
+
     elif
         [ $(uname -s) == Darwin ]; then
-        if brew install git && brew install gh && brew install curl && brew install node && brew install npm; then
-        echo
-        break
+        if brew update && brew upgrade && brew install git && brew install gh && brew install curl && brew install node && brew install npm; then
+            echo
+            break
         else
-            exit 1
+            return
         fi
         echo
         break
+
     elif [ $(uname -s) == CYGWIN || $(uname -s) ==* ]; then
         echo "CYGWIN is not yet supported"
     else
         exit
     fi
+
 done
 echo
 #Configures git
@@ -62,7 +66,7 @@ This app will be installed on your test repository at https://github.com/$userna
 Since the app may be used to test a lot of use cases, ensure that all the access permissions are set to \e[1mRead and Write\e[22m and or all checkboxes are marked.\e[39m'
 
 echo -e '\e[91mEnsure that you supply a Webhook URL and Webhook Secret for your new app.\e[39m'
-echo -e '\e[38;5;42mFor the Webhook URL, visit https://smee.io, copy and paste the URL to the \eWebhook URL section of the app\e[22m and also to the prompt below.\e[39m'
+echo -e '\e[38;5;42mFor the Webhook URL, visit https://smee.io, copy and paste the URL to the \e[1mWebhook URL section of the app\e[22m and also to the prompt below.\e[39m'
 echo
 
 #create temporary env file
@@ -76,9 +80,9 @@ read -p $'\e[1mEnter Webhook URL: \e[22m' webhookurl
 while true; do
 
     if  grep -q "200" <<< "$(curl -Is $webhookurl | head -1)" ; then
-    echo -e "\xE2\x9C\x94 \e[1m\e[38;5;42m$webhookurl\e[39m is up and running\e[22m"
-    echo
-    break
+        echo -e "\xE2\x9C\x94 \e[1m\e[38;5;42m$webhookurl\e[39m is up and running\e[22m"
+        echo
+        break
     else
         echo -e "\xE2\x9D\x8C \e[1m\e[91m$webhookurl\e[39m is not responsive as intended.
         Please provide a working Webhook URL as pasted in your GitHub App settings from https://smee.io \e[22m"
@@ -147,6 +151,6 @@ echo -e "\xE2\x9C\x94 moved to badging-bot directory"
 mv ../.env . && rm -rf ../.env
 echo -e "\xE2\x9C\x94 moved .env file to badging-bot directory"
 
-npx -y husky-init && npm ci
+npx -y husky-init && npm i
 
 npm run dev
