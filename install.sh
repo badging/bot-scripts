@@ -30,7 +30,7 @@ while true; do
         echo
         break
 
-    elif [[ '$(uname)' == 'CYGWIN' || 'os' ==* ]]; then
+    elif [[ '$(uname)' == 'CYGWIN' || '$(uname)' ==* ]]; then
         echo "CYGWIN is not yet supported"
     else
         exit
