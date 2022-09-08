@@ -1,5 +1,5 @@
 #!/bin/sh
-set -euo pipefail #exit in case of errors
+set -euxo pipefail #exit in case of errors
 
 # install dependencies
 while true; do
