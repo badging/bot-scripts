@@ -5,7 +5,7 @@ set -euxo pipefail #exit in case of errors
 while true; do
     echo -e '\e[91mPLEASE INPUT SUDO PASSWORD WHEN PROMPTED OTHERWISE TERMINAL WILL CLOSE SCRIPT\e[39m'
         
-    system=`uname`
+    system="$uname"
     
     if [[ $system == "Linux" ]]; then
         echo -e "\xE2\x9D\x8C please input your password to proceed so that the setup runs successfully"
