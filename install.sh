@@ -21,8 +21,7 @@ while true; do
         echo
         break
 
-    elif
-        [[ $system == "Darwin" ]]; then
+    elif [[ $system == "Darwin" ]]; then
         if brew update && brew upgrade && brew install git && brew install gh && brew install curl && brew install node && brew install npm; then
             echo
             break
@@ -32,9 +31,8 @@ while true; do
         echo
         break
 
-    elif [[ $system == "CYGWIN" || "$(uname)" ==* ]]; then
+    elif [[ $system == "CYGWIN" || "$(uname)" == * ]]; then
         echo "CYGWIN is not yet supported"
-    else
         exit
     fi
 
