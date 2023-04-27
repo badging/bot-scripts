@@ -1,11 +1,13 @@
 #!/bin/sh
-set -euo pipefail #exit in case of errors
+set -euxo pipefail #exit in case of errors
 
 # install dependencies
 while true; do
     echo -e '\e[91mPLEASE INPUT SUDO PASSWORD WHEN PROMPTED OTHERWISE TERMINAL WILL CLOSE SCRIPT\e[39m'
-
-    if [ $(uname -s) == Linux ]; then
+        
+    system="$uname"
+    
+    if [[ $system == "Linux" ]]; then
         echo -e "\xE2\x9D\x8C please input your password to proceed so that the setup runs successfully"
         echo
 
@@ -19,8 +21,7 @@ while true; do
         echo
         break
 
-    elif
-        [ $(uname -s) == Darwin ]; then
+    elif [[ $system == "Darwin" ]]; then
         if brew update && brew upgrade && brew install git && brew install gh && brew install curl && brew install node && brew install npm; then
             echo
             break
@@ -30,9 +31,8 @@ while true; do
         echo
         break
 
-    elif [ $(uname -s) == CYGWIN || $(uname -s) ==* ]; then
+    elif [[ $system == "CYGWIN" || "$(uname)" == * ]]; then
         echo "CYGWIN is not yet supported"
-    else
         exit
     fi
 
