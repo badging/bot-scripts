@@ -11,7 +11,7 @@ while true; do
         echo -e "\xE2\x9D\x8C please input your password to proceed so that the setup runs successfully"
         echo
 
-        if sudo apt update && sudo apt upgrade -y && sudo apt install -y git && sudo apt install -y gh && sudo apt install -y curl && sudo apt install -y nodejs && sudo apt install -y npm; then
+        if sudo apt update && sudo apt install -y git gh curl nodejs npm; then
             echo
             break
         else
@@ -22,7 +22,7 @@ while true; do
         break
 
     elif [[ $system == "Darwin" ]]; then
-        if brew update && brew upgrade && brew install git && brew install gh && brew install curl && brew install node && brew install npm; then
+        if brew update && brew install git gh curl node npm; then
             echo
             break
         else
