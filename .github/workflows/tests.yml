@@ -1,0 +1,41 @@
+name: Test bot installation script on different operating systems
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test:
+    name: Test bot script on ${{ matrix.os }} with ${{ matrix.compiler }}.
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        compiler: [ g++-10 ]
+        include:
+          - os: ubuntu-latest
+            compiler: g++-10
+            target: Linux
+
+          - os: macos-latest
+            compiler: g++-10
+            target: Macos
+
+          - os: windows-latest
+            compiler: cl
+            target: Windows
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run shell script
+        run: |
+          chmod +x install.sh
+          ./install.sh       
+
