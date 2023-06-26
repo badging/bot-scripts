@@ -1,7 +1,7 @@
 name: Test bot installation script on different operating systems
 on:
   push:
-    branches: [ main ]
+    branches: all
   pull_request:
     branches: [ main ]
 
