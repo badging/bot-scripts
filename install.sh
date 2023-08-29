@@ -32,8 +32,16 @@ while true; do
         break
 
     elif [[ $system == "CYGWIN" || "$(uname)" == * ]]; then
-        echo "CYGWIN is not yet supported"
-        exit
+    packages=("git" "gh" "curl" "nodejs")
+
+    for package in "${packages[@]}"; do
+        if ! command -v "$package" &> /dev/null; then
+            echo "Installing $package..."
+            apt-cyg install "$package"
+        else
+            echo "$package is already installed."
+        fi
+    done
     fi
 
 done
