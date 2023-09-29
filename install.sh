@@ -32,9 +32,16 @@ while true; do
         break
 
     elif [[ $system == "CYGWIN" || "$(uname)" == * ]]; then
-        choco install -y git gh curl nodejs 
-    fi
+    packages=("git" "gh" "curl" "nodejs")
 
+    for package in "${packages[@]}"; do
+        if ! command -v "$package" &> /dev/null; then
+            echo "Installing $package..."
+            choco install -y "$package"
+        else
+            echo "$package is already installed."
+        fi
+    done
 done
 echo
 #Configures git
