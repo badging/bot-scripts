@@ -16,6 +16,7 @@ jobs:
     name: Test bot script on ${{ matrix.os }} with ${{ matrix.compiler }}.
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
         compiler: [ g++-10 ]
@@ -34,11 +35,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Clear Git Cache
-        run: |
-          git gc --prune=now
-          git remote prune origin
-
       - name: Run shell script
         run: |
           chmod +x install.sh
