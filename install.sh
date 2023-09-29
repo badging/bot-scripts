@@ -32,7 +32,6 @@ while true; do
         break
 
     elif [[ $system == "CYGWIN" || "$(uname)" == * ]]; then
-        iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
         choco install -y git gh curl nodejs 
     fi
 
