@@ -42,7 +42,11 @@ while true; do
             echo "$package is already installed."
         fi
     done
+    echo "Packages installed successfully."
+    break
+    fi
 done
+
 echo
 #Configures git
 read -p $'\e[1mEnter Github username: \e[22m' username
