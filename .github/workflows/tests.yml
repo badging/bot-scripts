@@ -34,6 +34,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Clear Git Cache
+        run: |
+          git gc --prune=now
+          git remote prune origin
+
       - name: Run shell script
         run: |
           chmod +x install.sh
