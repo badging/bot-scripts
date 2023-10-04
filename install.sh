@@ -1,49 +1,21 @@
 #!/bin/bash
-set -euxo pipefail #exit in case of errors
+set -euo pipefail #exit in case of errors
 
 # install dependencies
-while true; do
-    echo -e '\e[91mPLEASE INPUT SUDO PASSWORD WHEN PROMPTED OTHERWISE TERMINAL WILL CLOSE SCRIPT\e[39m'
-        
-    system=$(uname)
-
-    if [[ $system == "Linux" ]]; then
-        echo
-        # Setup Githubcli Keyring
-        if type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
-        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
-        sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && \
-        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
-        sudo apt install -y ca-certificates gnupg && \
-        sudo mkdir -p /etc/apt/keyrings && \
-        curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-        echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
-        sudo apt update && sudo apt install -y gh git nodejs; then
-            echo
-            break
-        else
-            echo -e "\xE2\x9D\x8C An error occurred while executing the script"
-            return
-        fi
-        echo
-        break
-
-    elif [[ $system == "Darwin" ]]; then
-        if brew update && brew install git gh curl node npm; then
-            echo
-            break
-        else
-            return
-        fi
-        echo
-        break
-
-    elif [[ $system == "CYGWIN" || "$(uname)" == * ]]; then
-        iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-        choco install -y git gh curl nodejs 
-    fi
-
-done
+if type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
+sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && \
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
+sudo apt install -y ca-certificates gnupg && \
+sudo mkdir -p /etc/apt/keyrings && \
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
+sudo apt update && sudo apt install -y gh git nodejs; then
+    echo -e "dependencies installed successfully"
+else
+    echo -e "\xE2\x9D\x8C An error occurred while executing the script"
+    return
+fi
 echo
 #Configures git
 read -p $'\e[1mEnter Github username: \e[22m' username
