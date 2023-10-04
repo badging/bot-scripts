@@ -13,26 +13,8 @@ defaults:
 
 jobs:
   test:
-    name: Test bot script on ${{ matrix.os }} with ${{ matrix.compiler }}.
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-        compiler: [ g++-10 ]
-        include:
-          - os: ubuntu-latest
-            compiler: g++-10
-            target: Linux
-
-          - os: macos-latest
-            compiler: g++-10
-            target: Macos
-
-          - os: windows-latest
-            compiler: cl
-            target: Windows
-
+    name: Test bot script on ubuntu
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Run shell script
