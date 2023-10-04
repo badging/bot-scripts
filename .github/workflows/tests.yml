@@ -17,8 +17,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Run shell script
+
+      # check for linting errors
+      - name: Check for linting errors
         run: |
+          sudo apt-get update
+          sudo apt install -y shellcheck
           chmod +x install.sh
-          ./install.sh       
+          shellcheck install.sh
+
+      - name: Run shell script
+        run: ./install.sh       
 
