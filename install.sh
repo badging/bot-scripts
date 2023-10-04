@@ -8,19 +8,21 @@ while true; do
     system=$(uname)
 
     if [[ $system == "Linux" ]]; then
-        echo -e "\xE2\x9D\x8C please input your password to proceed so that the setup runs successfully"
         echo
         # Setup Githubcli Keyring
         if type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
         curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
         sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && \
         echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
-        curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && \
+        sudo apt install -y ca-certificates gnupg && \
+        sudo mkdir -p /etc/apt/keyrings && \
+        curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+        echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
         sudo apt update && sudo apt install -y gh git nodejs; then
             echo
             break
         else
-            echo -e "\xE2\x9D\x8C please input your password to proceed so that the setup runs successfully"
+            echo -e "\xE2\x9D\x8C An error occurred while executing the script"
             return
         fi
         echo
