@@ -39,11 +39,21 @@ while true; do
         break
 
     elif [[ $system == "CYGWIN" || "$(uname)" == * ]]; then
-        iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-        choco install -y git gh curl nodejs 
-    fi
+    packages=("git" "gh" "curl" "nodejs")
 
+    for package in "${packages[@]}"; do
+        if ! command -v "$package" &> /dev/null; then
+            echo "Installing $package..."
+            choco install -y "$package"
+        else
+            echo "$package is already installed."
+        fi
+    done
+    echo "Packages installed successfully."
+    break
+    fi
 done
+
 echo
 #Configures git
 read -p $'\e[1mEnter Github username: \e[22m' username
